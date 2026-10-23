@@ -1,0 +1,40 @@
+name: MATHIEU V1 CI
+
+on:
+  push:
+    branches:
+      - feature/mathieu-v1-foundation
+  pull_request:
+    branches:
+      - feature/mathieu-v1-foundation
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: mathieu-v1-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Typecheck, tests and production build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run unit tests
+        run: npm test
+
+      - name: Typecheck and build
+        run: npm run build
