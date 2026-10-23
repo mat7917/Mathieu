@@ -3,10 +3,10 @@ name: MATHIEU V1 CI
 on:
   push:
     branches:
-      - feature/mathieu-v1-foundation
+      - main
   pull_request:
     branches:
-      - feature/mathieu-v1-foundation
+      - main
   workflow_dispatch:
 
 permissions:
