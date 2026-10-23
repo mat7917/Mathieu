@@ -1,24 +1,43 @@
 # MATHIEU V1
 
-Plateforme d'orchestration de missions, construite avec React + TypeScript et Supabase.
+Application React + TypeScript pour piloter des missions, préparer des expériences et organiser les preuves et la mémoire, avec Supabase comme backend optionnel.
 
-## État
-Cette branche contient le socle d'architecture et une migration initiale. Elle n'est pas déclarée déployée ou testée avant vérification dans un projet Supabase de développement et exécution des tests.
+## Contenu de cette branche
 
-## Stack
-- React + TypeScript + Vite
-- Supabase Auth, PostgreSQL, RLS et Edge Functions
-- Migrations SQL versionnées dans `supabase/migrations/`
+- Tableau de bord responsive : aperçu, missions, découvertes, expériences, mémoire, modules, sécurité.
+- Huit modules fonctionnels répertoriés et leurs états d’avancement.
+- Création de brouillons de mission ; les exemples et actions locales sont étiquetés comme simulations.
+- Authentification Supabase par lien e-mail et persistance des missions lorsque Supabase est configuré.
+- Migration PostgreSQL initiale avec profils, missions, tâches, événements, découvertes, hypothèses, expériences, preuves, mémoires, permissions, approbations et versions de modules.
+- Politiques RLS fondées sur le propriétaire ; les écritures d’audit, d’approbations et de permissions sont réservées à une future couche serveur.
+- Tests unitaires de règles de sécurité et checklist de validation RLS à deux utilisateurs.
 
-## Démarrage
+## État honnête
+
+C’est une **fondation V1 regroupée dans cette branche**, pas un système autonome entièrement opérationnel. Les modules de découverte, hypothèses, expériences, preuves, mémoire durable, contrôleur de mission autonome et exécution sécurisée ne sont pas tous implémentés. Il n’y a pas encore d’Edge Function d’exécution. Le bouton d’arrêt d’urgence du frontend est local au navigateur, pas un coupe-circuit serveur. Build, tests d’intégration RLS et déploiement ne sont pas déclarés réussis.
+
+## Démarrage local
+
 1. Installer Node.js LTS.
-2. Copier `.env.example` en `.env.local` et définir l'URL Supabase et la clé publique anon/publishable.
-3. Installer les dépendances avec `npm install`.
-4. Lancer `npm run dev`.
+2. Copier `.env.example` en `.env.local`.
+3. Renseigner `VITE_SUPABASE_URL` et `VITE_SUPABASE_ANON_KEY` avec les valeurs publiques de ton projet Supabase.
+4. Installer et lancer :
 
-Ne jamais placer une clé `service_role` ou un secret fournisseur dans une variable `VITE_*`.
+```bash
+npm install
+npm test
+npm run build
+npm run dev
+```
 
-## Sécurité
-Appliquer d'abord les migrations dans un projet de développement. Tester RLS avec au moins deux utilisateurs. Toute migration destructive ou modification de production exige une approbation explicite et un plan de retour arrière.
+Sans configuration Supabase, l’interface s’ouvre en mode démonstration ; les brouillons locaux ne sont pas persistés.
 
-Voir [docs/architecture.md](docs/architecture.md).
+## Base de données et sécurité
+
+Appliquer `supabase/migrations/20261023000100_initial_schema.sql` uniquement dans un projet Supabase de développement après revue. Exécuter ensuite la checklist [tests/rls-validation.md](tests/rls-validation.md) avec deux comptes distincts. Ne jamais mettre de clé `service_role` ou de secret fournisseur dans une variable `VITE_*`. Toute action externe à risque, migration destructive ou modification de production exige une approbation explicite et un plan de retour arrière.
+
+## Documentation
+
+- [Architecture et modules](docs/architecture.md)
+- [Exigences pour les Edge Functions](supabase/functions/README.md)
+- [Checklist RLS](tests/rls-validation.md)
