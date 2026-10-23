@@ -30,11 +30,19 @@ jobs:
         with:
           node-version: 20
 
+      - name: Cache npm packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+
       - name: Install dependencies
-        run: npm install
+        run: npm install --prefer-offline --no-fund
 
       - name: Run unit tests
-        run: npm test
+        run: npm test -- --reporter=dot
 
       - name: Typecheck and build
         run: npm run build
